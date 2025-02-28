@@ -1,0 +1,10 @@
+[package]
+name = "speed-test-cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.4", features = ["derive"] }
+indicatif = "0.17.7"
+reqwest = { version = "0.11", features = ["blocking"] }
+tokio = { version = "1.0", features = ["full"] }
