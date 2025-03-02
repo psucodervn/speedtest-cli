@@ -9,17 +9,41 @@ A fast and lightweight command-line tool for testing internet connection speeds 
   - Download speed measurement
   - Upload speed measurement
   - Latency (ping) testing
+  - Network jitter measurement
   - Configurable file sizes for testing
   - Adjustable timeout settings
+  - Multiple server testing
+  - Network interface selection
 
-- **Flexible Output**
+- **Data Management**
+  - Historical data tracking
   - Multiple output formats supported:
     - Human-readable text
     - JSON
     - YAML
     - CSV
   - Output to console or file
+  - Export to Clickhouse for time-series analysis
   - Verbose mode for detailed logging
+
+### Clickhouse schema
+
+```sql
+CREATE TABLE internet_speed
+(
+    id UUID DEFAULT generateUUIDv4(),
+    timestamp DateTime DEFAULT now(),
+    download_speed_mbps Float32,
+    upload_speed_mbps Float32,
+    ping_ms Float32,
+    server_id String,
+    jitter_ms Float32
+)
+ENGINE = MergeTree()
+PARTITION BY toYYYYMM(timestamp)
+ORDER BY (timestamp, id)
+SETTINGS index_granularity = 8192;
+```
 
 ## Installation
 
@@ -49,6 +73,11 @@ Options:
       --download-size <SIZE>    Download file size in MB [default: 100]
       --upload-size <SIZE>      Upload file size in MB [default: 20]
       --timeout <SECONDS>       Timeout in seconds [default: 30]
+  -i, --interface <INTERFACE>   Network interface to use (e.g., eth0, wlan0)
+  -n, --iterations <NUMBER>     Number of test iterations [default: 1]
+      --history                 Enable historical data tracking
+      --clickhouse-url <URL>    Clickhouse URL for result export
+      --clickhouse-db <DB>      Clickhouse database name
   -h, --help                   Print help
   -V, --version                Print version
 ```
@@ -61,22 +90,28 @@ Options:
 speedtest-cli
 ```
 
-2. Output results in JSON format:
+2. Test specific network interface with multiple iterations:
 
 ```bash
-speedtest-cli --format json
+speedtest-cli --interface eth0 --iterations 3
 ```
 
-3. Save results to a file:
+3. Enable historical tracking and export to Clickhouse:
 
 ```bash
-speedtest-cli --output results.txt
+speedtest-cli --history --clickhouse-url http://localhost:8123 --clickhouse-db speedtest
 ```
 
-4. Custom test sizes with verbose output:
+4. Custom test sizes with verbose output and jitter measurement:
 
 ```bash
 speedtest-cli --verbose --download-size 200 --upload-size 50
+```
+
+5. Save results to JSON file with all metrics:
+
+```bash
+speedtest-cli --format json --output results.json
 ```
 
 ## Contributing
