@@ -47,6 +47,12 @@ SETTINGS index_granularity = 8192;
 
 ## Installation
 
+### From releases
+
+```sh
+curl -sL https://raw.githubusercontent.com/psucodervn/speedtest-cli/master/scripts/install-latest.sh | sudo sh
+```
+
 ### From Source
 
 ```bash
