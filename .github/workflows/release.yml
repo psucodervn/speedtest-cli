@@ -75,7 +75,7 @@ jobs:
         with:
           path: ./artifacts/
           pattern: speedtest-*
-          merge-multiple-artifacts: true
+          merge-multiple: true
 
       - name: Create Release
         id: create_release
