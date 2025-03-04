@@ -5,6 +5,10 @@ on:
     tags:
       - "v*" # Trigger on version tags
   workflow_dispatch: # Allows manual trigger
+    inputs:
+      tag:
+        description: "Release tag (e.g., v1.0.0)"
+        required: true
 
 env:
   CARGO_TERM_COLOR: always
@@ -77,6 +81,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ github.ref_name || inputs.tag }}
           files: |
             ./artifacts/*.tar.gz
             ./artifacts/*.zip
