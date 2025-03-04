@@ -19,12 +19,15 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             artifact_name: speedtest-linux-x86_64
+            binary: speedtest-cli
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             artifact_name: speedtest-windows-x86_64.exe
+            binary: speedtest-cli.ext
           - os: macos-latest
             target: x86_64-apple-darwin
             artifact_name: speedtest-macos-x86_64
+            binary: speedtest-cli
 
     steps:
       - uses: actions/checkout@v4
@@ -42,9 +45,9 @@ jobs:
         run: |
           cd target/release
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            7z a ../../${{ matrix.artifact_name }}.zip ${{ matrix.artifact_name }}
+            7z a ../../${{ matrix.artifact_name }}.zip ${{ matrix.binary }}
           else
-            tar czf ../../${{ matrix.artifact_name }}.tar.gz ${{ matrix.artifact_name }}
+            tar czf ../../${{ matrix.artifact_name }}.tar.gz ${{ matrix.binary }}
           fi
           cd ../..
 
