@@ -23,7 +23,7 @@ jobs:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             artifact_name: speedtest-windows-x86_64.exe
-            binary: speedtest-cli.ext
+            binary: speedtest-cli.exe
           - os: macos-latest
             target: x86_64-apple-darwin
             artifact_name: speedtest-macos-x86_64
